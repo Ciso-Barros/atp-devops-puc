@@ -20,3 +20,7 @@ jobs:
             - **Autor:** ${{ github.actor }}
             - **Ação:** ${{ github.event_name }}
             - **Link:** https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+    - name: Run Unit Tests
+      run: |
+        pip install -r requirements.txt
+        pytest --cov=app tests/ -v        

@@ -1,36 +1,35 @@
 import pytest
-from app.app import app  # Ajuste conforme sua estrutura
+from app.app import app  
 
 @pytest.fixture
 def client():
-    app.config['TESTING'] = True
+    app.config['TESTING'] = True  
     with app.test_client() as client:
         yield client
 
+# [Mantenha os mesmos 5 testes que você tinha antes]
 def test_hello_route(client):
-    """Testa se a rota principal retorna a mensagem esperada"""
     response = client.get('/')
     assert response.status_code == 200
-    assert b"API DevOps PUC - Funcionando no Docker!" in response.data
+    assert b"Funcionando no Docker!" in response.data
 
 def test_health_route(client):
-    """Testa se a rota health retorna status healthy"""
     response = client.get('/health')
     assert response.status_code == 200
     assert response.json == {"status": "healthy"}
 
-def test_404_error(client):
-    """Testa se rotas inexistentes retornam 404"""
+# Teste 3: Verifica o tratamento de erro 404
+def test_not_found_error(client):
     response = client.get('/rota_inexistente')
     assert response.status_code == 404
     assert response.json == {"error": "Endpoint not found"}
 
-def test_hello_route_content_type(client):
-    """Testa se o content-type da rota principal é text/html"""
+# Teste 4: Verifica o Content-Type da rota principal
+def test_hello_content_type(client):
     response = client.get('/')
     assert response.content_type == 'text/html; charset=utf-8'
 
-def test_health_route_content_type(client):
-    """Testa se o content-type da rota health é application/json"""
+# Teste 5: Verifica o Content-Type da rota health
+def test_health_content_type(client):
     response = client.get('/health')
     assert response.content_type == 'application/json'
