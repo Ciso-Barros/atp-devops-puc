@@ -1,4 +1,4 @@
-name: Discord Alerts
+name: CI/CD Pipeline
 on:
   push:
     branches: [main]
@@ -6,9 +6,10 @@ on:
     branches: [main]
 
 jobs:
-  alert:
+  alert-and-test:
     runs-on: ubuntu-latest
     steps:
+      # Notificação no Discord
       - name: Send Discord Notification
         uses: Ilshidur/action-discord@master
         env:
@@ -20,7 +21,13 @@ jobs:
             - **Autor:** ${{ github.actor }}
             - **Ação:** ${{ github.event_name }}
             - **Link:** https://github.com/${{ github.repository }}/commit/${{ github.sha }}
-    - name: Run Unit Tests
-      run: |
-        pip install -r requirements.txt
-        pytest --cov=app tests/ -v        
+
+      # Instalação de dependências
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # Execução dos testes
+      - name: Run Unit Tests
+        run: pytest --cov=app tests/ -v
+        env:
+          PYTHONPATH: ${{ github.workspace }}
