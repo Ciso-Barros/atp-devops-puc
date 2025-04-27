@@ -1,10 +1,9 @@
 name: Discord Alerts
-
 on:
   push:
-    branches: [ main ]  # Dispara em pushes para a main
+    branches: [main]
   pull_request:
-    branches: [ main ]  # Dispara quando PRs são mergidas na main
+    branches: [main]
 
 jobs:
   alert:
@@ -12,6 +11,12 @@ jobs:
     steps:
       - name: Send Discord Notification
         uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}  # URL do webhook (segura!)
-          args: "🚀 **Evento no Repositório**\n\n- **Branch:** ${{ github.ref }}\n- **Autor:** ${{ github.actor }}\n- **Mensagem:** ${{ github.event.head_commit.message }}\n- **Link:** ${{ github.event.head_commit.url }}"
+          content: |
+            🚀 **Evento no Repositório**
+            - **Branch:** ${{ github.ref }}
+            - **Autor:** ${{ github.actor }}
+            - **Ação:** ${{ github.event_name }}
+            - **Link:** https://github.com/${{ github.repository }}/commit/${{ github.sha }}
