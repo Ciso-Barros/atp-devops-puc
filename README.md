@@ -1,7 +1,7 @@
 # ATP DevOps - Dockerização
 
 Aplicação Flask containerizada para a atividade da PUC.
-
+TESTE
 ## Como executar:
 ```bash
 docker build -t atp-api .
